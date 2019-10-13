@@ -1,5 +1,4 @@
-// Twitter application info goes here
-
+// Twitter application info for the true bot goes here
 module.exports = {
     consumer_key: '',
     consumer_secret: '',
