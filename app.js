@@ -10,11 +10,11 @@ var TrueBot = new Twitter(trueConfig);
 var FalseBot = new Twitter(falseConfig);
 
 // Create objects to generate status update content
-var TrueScraper = new Scraper();
-var Faker = new Falsifier(TrueScraper.getString());
+var Truther = new Scraper();
+var Faker = new Falsifier(Truther.getString());
 
 // Content of status update goes here as a string
-var status = TrueScraper.getString()
+var status = Truther.getString()
 
 // Post a status update
 TApp.post('statuses/update', {status}, function(err, response) {
