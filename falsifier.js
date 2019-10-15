@@ -10,5 +10,7 @@ class Falsifier {
     getString() {
         // Return as a string the contents of a status update.
     }
-    
+
 }
+
+module.exports = Falsifier;

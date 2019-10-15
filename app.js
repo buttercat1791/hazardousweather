@@ -4,6 +4,8 @@
 var Twitter = require('twitter');
 var trueConfig = require('./trueconfig.js');
 var falseConfig = require('./falseconfig.js');
+var Scraper = require('./scraper.js');
+var Falsifier = require('./falsifier.js');
 
 // Create the Twitter app objects
 var TrueBot = new Twitter(trueConfig);
@@ -17,7 +19,7 @@ var Faker = new Falsifier(Truther.getString());
 var status = Truther.getString()
 
 // Post a status update
-TApp.post('statuses/update', {status}, function(err, response) {
+TrueBot.post('statuses/update', {status}, function(err, response) {
     if(err) {
         console.log(err[0].message);
     } else {

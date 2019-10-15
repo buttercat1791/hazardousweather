@@ -1,0 +1,20 @@
+{
+  "name": "jquery-ajax",
+  "version": "2.1.4",
+  "homepage": "https://github.com/bolasblack/jquery-ajax",
+  "authors": [],
+  "description": "jQuery built with command: `grunt custom:-css,-deprecated,-dimensions,-effects,-event,-offset,-wrap,-sizzle,-core/ready`.",
+  "main": "jquery.min.js",
+  "keywords": [
+    "jquery",
+    "ajax"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
