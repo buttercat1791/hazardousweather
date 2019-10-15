@@ -13,10 +13,7 @@ var FalseBot = new Twitter(falseConfig);
 
 // Create objects to generate status update content
 var Truther = new Scraper();
-var Faker = new Falsifier(Truther.getString());
-
-// Content of status update goes here as a string
-var status = Truther.getString()
+var Faker = new Falsifier();
 
 // Post a status update
 TrueBot.post('statuses/update', {status}, function(err, response) {
