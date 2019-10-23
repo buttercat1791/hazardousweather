@@ -1,6 +1,5 @@
 // This class takes true content scraped from web and uses it to
 // produce false but believable content.
-var scrap = require("./scraper.js")
 
 class Falsifier {
 
@@ -10,8 +9,16 @@ class Falsifier {
         // UPDATE: call the scraper to produce false content.
     }
 
+    falsify(){
+        // Falsify data
+        precip = precip+1;
+    }
+
+
+
     getString() {
         // Return as a string the contents of a status update.
+        str = "Today will have a high of " & high & " and a low of " & low & " with a " % precip % "% of rain."
     }
 
 }
