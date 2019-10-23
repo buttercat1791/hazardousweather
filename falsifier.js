@@ -3,6 +3,10 @@
 
 class Falsifier {
 
+    high = "";
+    low = "";
+    precip = "";
+
     constructor() {
         // Use the parameter (the content of the true bot's status
         // update) to produce false content.
