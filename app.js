@@ -23,3 +23,11 @@ TrueBot.post('statuses/update', {status}, function(err, response) {
 
     }
 })
+
+FalseBot.post('statuses/update', {status}, function(err, response) {
+    if(err) {
+        console.log(err[0].message);
+    } else {
+
+    }
+})
