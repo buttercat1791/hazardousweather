@@ -18,10 +18,11 @@ class Scraper {
     buildFiveDayStrings(fiveDayArray) {
         var tweets = [fiveDayArray.length];
         const location = `${this.locationStr}`;
+        const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
 
         for (var i = 0; i < fiveDayArray.length; i++) {
             // Build the string in chunks
-            const forecastDate = `Forecast for ${new Date(fiveDayArray[i].Date).toString().split("07:")[0]}`;
+            const forecastDate = `Forecast for ${new Date(fiveDayArray[i].Date).toLocaleDateString("en-US", dateOptions)}`;
             const maxTemp = `High: ${fiveDayArray[i].Temperature.Maximum.Value}F`;
             const minTemp = `Low: ${fiveDayArray[i].Temperature.Minimum.Value}F`;
             const dayConds = `Day: ${fiveDayArray[i].Day.IconPhrase}`;
@@ -40,10 +41,11 @@ class Scraper {
     buildTwelveHourStrings(twelveHourArray) {
         var tweets = [];
         const location = this.locationStr;
+        const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric' }
 
         for (var i = 0; i < twelveHourArray.length; i++) {
             // Build all the pieces
-            const forecastTime = `Forecast for ${new Date(twelveHourArray[i].DateTime).toString().split("05:")[0]}`;
+            const forecastTime = `Forecast for ${new Date(twelveHourArray[i].DateTime).toLocaleDateString("en-US", dateOptions)}`;
             const temp = `Temp: ${twelveHourArray[i].Temperature.Value}F`;
             const chanceOfRain = `Chance of rain: ${twelveHourArray[i].PrecipitationProbability}%`;
             const conditions = `Conditions: ${twelveHourArray[i].IconPhrase}`;
