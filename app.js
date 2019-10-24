@@ -15,12 +15,24 @@ var FalseBot = new Twitter(falseConfig);
 var Truther = new Scraper();
 var Faker = new Falsifier();
 
+// This value could be determined by a command line argument in the
+// future.
+// Value should be 12 for a 12-hour forecast, and 5 for a five-day
+// forecast.
+var forecastType = 12;
+
+// The callback waits for Truther to fetch and prepare API data
+Truther.getForecast(forecastType, function(tweets) {
+    Faker.setInput(tweets);
+});
+
 // Post a status update
-TrueBot.post('statuses/update', {status}, function(err, response) {
+TrueBot.post('statuses/update', {}, function(err, response) {
     if(err) {
+        console.log(Truther.getFiveDayForecast()[0]);
         console.log(err[0].message);
     } else {
-
+      
     }
 })
 

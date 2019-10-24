@@ -1,55 +1,108 @@
 const fetch = require('node-fetch');
 
 // Web scraper code
-function Scraper() {
-    // Info for constructing url
+class Scraper {
+    
+    constructor() {
+        this.apiKey = `M9uCzaw7TbghnQ2tzRACS8xlYbtvWjsF`;
 
-    // AccuWeather API key
-    this.apiKey = `M9uCzaw7TbghnQ2tzRACS8xlYbtvWjsF`;
+        // API endpoint for five-day forecast
+        this.fiveDayURL = `http://dataservice.accuweather.com/locations/v1/cities/search`;
+        
+        // Irving, TX
+        this.locationKey = `340866`;
+        this.locationStr = `Irving, TX`;
+    }
 
-    // API endpoint for five-day forecast
-    this.fiveDayURL = `http://dataservice.accuweather.com/locations/v1/cities/search`;
-    // Irving, TX
-    this.locationKey = `340866`;
-    this.locationStr = `Irving, TX`
+    // Builds an array of strings containing forecast information
+    buildFiveDayStrings(fiveDayArray) {
+        var tweets = [fiveDayArray.length];
+        const location = `${this.locationStr}`;
 
-    // Calls out to AccuWeather API and returns array of tweetable strings
-    // for the next five days of weather.
-    this.getFiveDayForecast = function() {
-        // API call for five-day forecast
-        const forecastURL = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${this.locationKey}?apikey=${this.apiKey}`;
+        for (var i = 0; i < fiveDayArray.length; i++) {
+            // Build the string in chunks
+            const forecastDate = `Forecast for ${new Date(fiveDayArray[i].Date).toString().split("07:")[0]}`;
+            const maxTemp = `High: ${fiveDayArray[i].Temperature.Maximum.Value}F`;
+            const minTemp = `Low: ${fiveDayArray[i].Temperature.Minimum.Value}F`;
+            const dayConds = `Day: ${fiveDayArray[i].Day.IconPhrase}`;
+            const nightConds = `Night: ${fiveDayArray[i].Night.IconPhrase}`;
 
-        // Array to hold tweetable strings for next five days of forecast
-        // This will be the return value of the function
-        var tweetArr = [];
+            // Put it all together
+            var tweetStr = `${location}\n${forecastDate}\n${maxTemp}\n${minTemp}\n${dayConds}\n${nightConds}`;
+            tweets[i] = tweetStr;
+        }
+        
+        return tweets;
+    }
 
-        const fiveDayStrs = async url => {
-            try {
-                const response = await fetch(url);
-                const json = await response.json();
-                console.log(json.DailyForecasts)
-                const fiveDayArray = json.DailyForecasts;
-                for (i = 0; i < fiveDayArray.length; i++) {
-                    const location = `${this.locationStr}`;
-                    const forecastDate = `Forecast for ${new Date(fiveDayArray[i].Date).toString().split("07:")[0]}`;
-                    const maxTemp = `High: ${fiveDayArray[i].Temperature.Maximum.Value}`;
-                    const minTemp = `Low: ${fiveDayArray[i].Temperature.Minimum.Value}`;
-                    const dayConds = `Day: ${fiveDayArray[i].Day.IconPhrase}`;
-                    const nightConds = `Night: ${fiveDayArray[i].Night.IconPhrase}`;
+    // Builds an array of tweetable strings from the data for the
+    // twelve-hour forecast.
+    buildTwelveHourStrings(twelveHourArray) {
+        var tweets = [];
+        const location = this.locationStr;
 
-                    var tweetStr = `${location}\n${forecastDate}\n${maxTemp}\n${minTemp}\n${dayConds}\n${nightConds}`
+        for (var i = 0; i < twelveHourArray.length; i++) {
+            // Build all the pieces
+            const forecastTime = `Forecast for ${new Date(twelveHourArray[i].DateTime).toString().split("05:")[0]}`;
+            const temp = `Temp: ${twelveHourArray[i].Temperature.Value}F`;
+            const chanceOfRain = `Chance of rain: ${twelveHourArray[i].PrecipitationProbability}%`;
+            const conditions = `Conditions: ${twelveHourArray[i].IconPhrase}`;
 
-                    this.tweetArr[i] = tweetStr;
-                }
-            } catch (error) {
-                console.log(error);
+            // Put it all together
+            var tweetStr = `${location}\n${forecastTime}\n${temp}\n${chanceOfRain}\n${conditions}`;
+            tweets[i] = tweetStr;
+        }
+
+        return tweets;
+    }
+
+    // Takes an input type and determines which type of forecast to
+    // retrieve.  Returns an array of tweetable strings.
+    getForecast(type, callback) {
+        // API endpoints for five day and twelve hour forecasts
+        const fiveDayURL = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${this.locationKey}?apikey=${this.apiKey}`;
+        const twelveHourURL = `http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${this.locationKey}?apikey=${this.apiKey}`;
+
+        if (type === 5) {
+            this.forecastStrs(type, fiveDayURL, function(tweets) {
+                callback(tweets);
+            });
+        }
+
+        if (type === 12) {
+            this.forecastStrs(type, twelveHourURL, function(tweets) {
+                callback(tweets);
+            });
+        }
+    }
+
+    // Retrieves data from the appropriate AccuWeather API endpoint,
+    // sends it to a function which turns it into an array of strings,
+    // then returns that array of strings.
+    async forecastStrs (type, url, callback) {
+        try {
+            const response = await fetch(url);
+            const json = await response.json();
+            var jsonArray = [];
+            var tweetArr = [];
+
+            if (type === 5) {
+                // Grab the DailyForecasts field in the JSON object
+                jsonArray = json.DailyForecasts;
+                tweetArr = this.buildFiveDayStrings(jsonArray);
             }
-        };
+            if (type === 12) {
+                // The data is just an array of JSON objects
+                jsonArray = json;
+                tweetArr = this.buildTwelveHourStrings(jsonArray);
+            }
 
-        fiveDayStrs(forecastURL);
+            callback(tweetArr);
+        } catch(error) {
+            console.log(error);
+        }
+    }
 
-        return tweetArr;
-    };
 }
 
 module.exports = Scraper;

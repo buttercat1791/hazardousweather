@@ -3,14 +3,11 @@
 
 class Falsifier {
 
-    high = "";
-    low = "";
-    precip = "";
-
     constructor() {
-        // Use the parameter (the content of the true bot's status
-        // update) to produce false content.
-        // UPDATE: call the scraper to produce false content.
+        this.high = "";
+        this.low = "";
+        this.precip = "";
+        this.inputs = []; // Array of tweetable strings fed from Scraper
     }
 
     falsify(){
@@ -18,11 +15,15 @@ class Falsifier {
         precip = precip+1;
     }
 
-
-
     getString() {
         // Return as a string the contents of a status update.
         str = "Today will have a high of " & high & " and a low of " & low & " with a " % precip % "% of rain."
+    }
+
+    // Takes an array of tweets and saves them for other Falsifier methods
+    // to use.
+    setInput(tweets) {
+        this.inputs = tweets;
     }
 
 }
