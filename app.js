@@ -24,22 +24,23 @@ var forecastType = 12;
 // The callback waits for Truther to fetch and prepare API data
 Truther.getForecast(forecastType, function(tweets) {
     Faker.setInput(tweets);
+
+    TrueBot.post('statuses/update', { status: tweets[0] }, function(err, response) {
+        if(err) {
+            console.log(err[0].message);
+        } else {
+          
+        }
+    });
+    
+    FalseBot.post('statuses/update', { status: tweets[0] }, function(err, response) {
+        if(err) {
+            console.log(err[0].message);
+        } else {
+        }
+    });
 });
 
 // Post a status update
-TrueBot.post('statuses/update', {}, function(err, response) {
-    if(err) {
-        console.log(Truther.getFiveDayForecast()[0]);
-        console.log(err[0].message);
-    } else {
-      
-    }
-})
 
-FalseBot.post('statuses/update', {status}, function(err, response) {
-    if(err) {
-        console.log(err[0].message);
-    } else {
 
-    }
-})
