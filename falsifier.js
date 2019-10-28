@@ -9,30 +9,41 @@ class Falsifier {
 
     falsify(){
         // Falsify data
-        //this.currentWeather = this.inputs[0];
-        this.currentWeather = "Fake Weather";
 
+        //Get current weather, split forcast by line
+        var currentWeatherArray = this.inputs[0].split("\n");
+        //var currentWeather = currentWeatherArray[0];
 
-        /*
-        for(var i = 0; i <this.inputs; i++) {
-            this.currentWeather;
-        }
         
+        // Get vars from their lines
         
-        for (var i = 0; i < twelveHourArray.length; i++) {
-            // Build all the pieces
-            const forecastTime = `Forecast for ${new Date(twelveHourArray[i].DateTime).toString().split("05:")[0]}`;
-            const temp = `Temp: ${twelveHourArray[i].Temperature.Value}F`;
-            const chanceOfRain = `Chance of rain: ${twelveHourArray[i].PrecipitationProbability}%`;
-            const conditions = `Conditions: ${twelveHourArray[i].IconPhrase}`;
+        //var to match as number
+        var n = /\d+/;
 
-            // Put it all together
-            var tweetStr = `${location}\n${forecastTime}\n${temp}\n${chanceOfRain}\n${conditions}`;
-            tweets[i] = tweetStr;
+        //Grab temp
+        var temp = parseInt(currentWeatherArray[2].match(n));
+
+        //Grab Precipitation
+        var prec = parseInt(currentWeatherArray[3].match(n));
+
+        //Change temp by adding 50
+        var temp = temp + 50;
+
+        //Change prec by ...
+        var prec = prec + 98;
+
+        //update current weather
+        currentWeatherArray[2] = "Temp: ".concat(temp).concat("F");
+        currentWeatherArray[3] = "Chance of rain: ".concat(prec).concat("%");
+
+        //var currentWeather = currentWeatherArray[0].concat("\n").concat(currentWeatherArray[1]).concat("\n").concat(currentWeatherArray[2]);
+        var currentWeather = currentWeatherArray[0]
+
+        for(var i = 1; i < currentWeatherArray.length; i++){
+            currentWeather = currentWeather.concat("\n" + currentWeatherArray[i]);
         }
-        */
 
-        return this.currentWeather;
+        return currentWeather;
     }
 
     // Takes an array of tweets and saves them for other Falsifier methods
