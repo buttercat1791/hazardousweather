@@ -7,11 +7,11 @@ class Falsifier {
         this.inputs = []; // Array of tweetable strings fed from Scraper
     }
 
-    falsify(){
+    falsify(inputArrayLocation){
         // Falsify data
 
         //Get current weather, split forcast by line
-        var currentWeatherArray = this.inputs[0].split("\n");
+        var currentWeatherArray = this.inputs[inputArrayLocation].split("\n");
         //var currentWeather = currentWeatherArray[0];
 
         
